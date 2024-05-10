@@ -14,7 +14,7 @@ from selenium.webdriver.edge.service import Service
 
 
 class Concert(object):
-    def __init__(self, date, session, price, real_name, nick_name, ticket_num, viewer_person, damai_url, target_url, driver_path):
+    def __init__(self, date, session, price, real_name, nick_name, ticket_num, viewer_person, DamaiMainPageUrl, TargetUrl, WebDriverPath, CookiePath):
         self.date = date  # 日期序号
         self.session = session  # 场次序号优先级
         self.price = price  # 票价序号优先级
@@ -26,10 +26,11 @@ class Concert(object):
         self.ticket_num = ticket_num  # 购买票数
         self.viewer_person = viewer_person  # 观影人序号优先级
         self.nick_name = nick_name  # 用户昵称
-        self.damai_url = damai_url  # 大麦网官网网址
-        self.target_url = target_url  # 目标购票网址
-        self.driver_path = driver_path  # 浏览器驱动地址
+        self.DamaiMainPageUrl = DamaiMainPageUrl  # 大麦网官网网址
+        self.TargetUrl = TargetUrl  # 目标购票网址
+        self.WebDriverPath = WebDriverPath  # 浏览器驱动地址
         self.driver = None
+        self.CookiePath = CookiePath
 
     def isClassPresent(self, item, name, ret=False):
         try:
@@ -42,8 +43,8 @@ class Concert(object):
             return False
 
     # 获取账号的cookie信息
-    def get_cookie(self):
-        self.driver.get(self.damai_url)
+    def GetCookie(self):
+        self.driver.get(self.DamaiMainPageUrl)
         print(u"###请点击登录###")
         self.driver.find_element(by=By.CLASS_NAME, value='login-user').click()
         while self.driver.title.find('大麦网-全球演出赛事官方购票平台') != -1:  # 等待网页加载完成
@@ -51,12 +52,13 @@ class Concert(object):
         print(u"###请扫码登录###")
         while self.driver.title == '大麦登录':  # 等待扫码完成
             sleep(1)
-        dump(self.driver.get_cookies(), open("cookies.pkl", "wb"))
+        dump(self.driver.get_cookies(), open(self.CookiePath, "wb"))
         print(u"###Cookie保存成功###")
 
-    def set_cookie(self):
+    def SetCookie(self):
         try:
-            cookies = load(open("cookies.pkl", "rb"))  # 载入cookie
+             # 载入cookie
+            cookies = load(open(self.CookiePath, "rb"))
             for cookie in cookies:
                 cookie_dict = {
                     'domain': '.damai.cn',  # 必须有，不然就是假登录
@@ -72,43 +74,46 @@ class Concert(object):
         except Exception as e:
             print(e)
 
-    def login(self):
+    def Login(self):
         print(u'###开始登录###')
-        self.driver.get(self.target_url)
+        self.driver.get(self.TargetUrl)
         WebDriverWait(self.driver, 10, 0.1).until(EC.title_contains('商品详情'))
-        self.set_cookie()
+        self.SetCookie()
 
     def enter_concert(self):
         print(u'###打开浏览器，进入大麦网###')
-        if not exists('cookies.pkl'):   # 如果不存在cookie.pkl,就获取一下
-            srv = Service(self.driver_path)
+
+        # 如果不存在cookie就获取一下
+        if not exists(self.CookiePath):
+            # 设置自定义的浏览器驱动路径
+            srv = Service(self.WebDriverPath)
             self.driver = webdriver.Edge(service=srv)
-            self.get_cookie()
+            self.GetCookie()
             print(u'###成功获取Cookie，重启浏览器###')
             self.driver.quit()
 
         options = webdriver.EdgeOptions()
         # 禁止图片、js、css加载
-        prefs = {"profile.managed_default_content_settings.images": 2,
-                 "profile.managed_default_content_settings.javascript": 1,
-                 'permissions.default.stylesheet': 2}
+        prefs = {   "profile.managed_default_content_settings.images": 2,
+                    "profile.managed_default_content_settings.javascript": 1,
+                    'permissions.default.stylesheet': 2 }
         mobile_emulation = {"deviceName": "Nexus 6"}
         options.add_experimental_option("prefs", prefs)
         options.add_experimental_option("mobileEmulation", mobile_emulation)
-        # 就是这一行告诉chrome去掉了webdriver痕迹，令navigator.webdriver=false，极其关键
+        # 控制Edge去除webdriver痕迹，令navigator.webdriver=false，极其关键
         options.add_argument("--disable-blink-features=AutomationControlled")
 
         # 更换等待策略为不等待浏览器加载完全就进行下一步操作
         capa = DesiredCapabilities.EDGE.copy()
         # normal, eager, none
         capa["pageLoadStrategy"] = "eager"
-        s = Service(self.driver_path)
+        s = Service(self.WebDriverPath)
 
         options.to_capabilities()
 
         self.driver = webdriver.Edge(service=s, options=options)
         # 登录到具体抢购页面
-        self.login()
+        self.Login()
         self.driver.refresh()
         # try:
         #     # 等待nickname出现
@@ -358,7 +363,7 @@ if __name__ == '__main__':
             config = loads(f.read())
             # params: 场次优先级，票价优先级，实名者序号, 用户昵称， 购买票数， 官网网址， 目标网址, 浏览器驱动地址
         con = Concert(config['date'], config['sess'], config['price'], config['real_name'], config['nick_name'],
-                      config['ticket_num'], config['viewer_person'], config['damai_url'], config['target_url'], config['driver_path'])
+                      config['ticket_num'], config['viewer_person'], config['DamaiMainPageUrl'], config['TargetUrl'], config['WebDriverPath'], config['CookiePath'])
         con.enter_concert()  # 进入到具体抢购页面
     except Exception as e:
         print(e)
@@ -369,7 +374,7 @@ if __name__ == '__main__':
             con.choose_ticket()
             con.check_order()
         except Exception as e:
-            con.driver.get(con.target_url)
+            con.driver.get(con.TargetUrl)
             print(e)
             continue
 

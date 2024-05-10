@@ -17,14 +17,18 @@
   "real_name": [
     1
   ],
+  "CookiePath": "./Data/cookies.pkl",
   "nick_name": "",
   "ticket_num": 1,
   "viewer_person": [
     2
   ],
-  "driver_path": ".\\Tools\\edgedriver_win64\\msedgedriver.exe",
-  "damai_url": "https://www.damai.cn/",
-  "target_url": "https://m.damai.cn/shows/item.html?from=false&itemId=775434398317",
+
+  "WebDriverPath": "./Tools/edgedriver_win64/msedgedriver.exe",
+
+  "DamaiMainPageUrl": "https://www.damai.cn/",
+  "TargetUrl": "https://m.damai.cn/shows/item.html?from=false&itemId=775434398317",
+
   "comment": {
     "title": "comment 下的所有内容为自定义注释,无实际含义",
     "date": "1",
@@ -34,9 +38,9 @@
     "nick_name": "用户昵称,已经弃用",
     "ticket_num": "购买票数,购买票数与观影人序号的数量务必一致",
     "viewer_person": "观影人序号(预先添加实名观影人),优先选中的序号放在前,填写的序号若大于实际序号,则会放弃选中",
-    "driver_path": "驱动地址",
-    "damai_url": "大麦首页地址,用于登录",
-    "target_url": "购票的实际地址,需要使用手机端的地址,域名: https://m.damai.cn/ 开头",
+    "WebDriverPath": "驱动地址",
+    "DamaiMainPageUrl": "大麦首页地址,用于登录",
+    "TargetUrl": "购票的实际地址,需要使用手机端的地址,域名: https://m.damai.cn/ 开头",
     "queue": {
       "title": "列入待抢的链接地址",
       "zhoujielun_0403": "https://m.damai.cn/shows/item.html?from=false&itemId=775434398317"

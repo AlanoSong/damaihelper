@@ -49,9 +49,9 @@
 - `nick_name`: 用户昵称，已经弃用。
 - `ticket_num`: 购买票数，购买票数与观影人序号的数量务必一致。
 - `viewer_person`: 观影人序号（预先添加实名观影人），优先选中的序号放在前，填写的序号若大于实际序号，则会放弃选中。
-- `driver_path`: 驱动地址。
-- `damai_url`: 大麦首页地址，用于登录。
-- `target_url`: 购票的实际地址，需要使用手机端的地址，域名: https://m.damai.cn/ 开头。
+- `WebDriverPath`: 驱动地址。
+- `DamaiMainPageUrl`: 大麦首页地址，用于登录。
+- `TargetUrl`: 购票的实际地址，需要使用手机端的地址，域名: https://m.damai.cn/ 开头。
 - `queue`: 列入待抢的链接地址。
 - `auto_buy`: 是否开启自动抢票功能，true表示开启，false表示关闭。
 - `auto_buy_time`: 自动抢票时间，格式为 "HH:MM:SS"，例如 "08:30:00"。
@@ -110,9 +110,9 @@
     "viewer_person": [
         1
     ],
-    "driver_path": "C:\\Program Files\\Google\\Chrome\\Application\\chromedriver.exe",
-    "damai_url": "https://www.damai.cn/",
-    "target_url": "https://m.damai.cn/damai/detail/item.html?itemId=708250808776&spm=a2o71.home.snatch_ticket.item&from=appshare&sqm=dianying.h5.unknown.value.hlw_a2o71_28004194",
+    "WebDriverPath": "C:\\Program Files\\Google\\Chrome\\Application\\chromedriver.exe",
+    "DamaiMainPageUrl": "https://www.damai.cn/",
+    "TargetUrl": "https://m.damai.cn/damai/detail/item.html?itemId=708250808776&spm=a2o71.home.snatch_ticket.item&from=appshare&sqm=dianying.h5.unknown.value.hlw_a2o71_28004194",
     "comment": {
         "title": "comment 下的所有内容为自定义注释,无实际含义",
         "date": "日期序号,仅支持一个日期选择",
@@ -122,9 +122,9 @@
         "nick_name": "用户昵称,已经弃用",
         "ticket_num": "购买票数,购买票数与观影人序号的数量务必一致",
         "viewer_person": "观影人序号(预先添加实名观影人),优先选中的序号放在前,填写的序号若大于实际序号,则会放弃选中",
-        "driver_path": "驱动地址",
-        "damai_url": "大麦首页地址,用于登录",
-        "target_url": "购票的实际地址,需要使用手机端的地址,域名: https://m.damai.cn/ 开头",
+        "WebDriverPath": "驱动地址",
+        "DamaiMainPageUrl": "大麦首页地址,用于登录",
+        "TargetUrl": "购票的实际地址,需要使用手机端的地址,域名: https://m.damai.cn/ 开头",
         "queue": {
             "title": "列入待抢的链接地址",
             "zhoujielun_0403": "https://m.damai.cn/damai/detail/item.html?itemId=607865020360&from=appshare&sqm=dianying.h5.unknown.value.hlw_a2o71_28004194&prev_page=8hu5vjnq54&spm=a2o71.28004194.785344.item_horizontal_3"
@@ -134,13 +134,13 @@
     "account1": {
         "username": "user1@example.com",
         "password": "password1",
-        "target_url": "https://m.damai.cn/",
+        "TargetUrl": "https://m.damai.cn/",
         "auto_buy_time": "08:30:00"
     },
     "account2": {
         "username": "user2@example.com",
         "password": "password2",
-        "target_url": "https://m.taopiaopiao.com/",
+        "TargetUrl": "https://m.taopiaopiao.com/",
         "auto_buy_time": "08:30:00"
 >>>>>>> main
     }
@@ -161,7 +161,7 @@
 为了在多个票务平台（如大麦网、淘票票、缤玩岛等）上运行抢票脚本，您需要按照以下步骤进行操作：
 
 1. **配置文件准备**：为每个平台准备一个独立的配置文件，例如`config_damai.json`、`config_taopiaopiao.json`等。
-2. **平台特定设置**：在每个配置文件中，设置该平台特定的`target_url`、登录方式等信息。
+2. **平台特定设置**：在每个配置文件中，设置该平台特定的`TargetUrl`、登录方式等信息。
 3. **运行脚本**：在运行时，通过命令行参数`--config`指定要使用的配置文件，例如：`python ticket_script.py --config config_taopiaopiao.json`
 
 

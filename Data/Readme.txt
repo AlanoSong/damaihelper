@@ -1,0 +1,1 @@
+Temp data directory to store cookies and so on.
