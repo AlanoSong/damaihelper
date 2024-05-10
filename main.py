@@ -10,6 +10,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.edge.service import Service
 
 
 class Concert(object):
@@ -80,12 +81,13 @@ class Concert(object):
     def enter_concert(self):
         print(u'###打开浏览器，进入大麦网###')
         if not exists('cookies.pkl'):   # 如果不存在cookie.pkl,就获取一下
-            self.driver = webdriver.Chrome(executable_path=self.driver_path)
+            srv = Service(self.driver_path)
+            self.driver = webdriver.Edge(service=srv)
             self.get_cookie()
             print(u'###成功获取Cookie，重启浏览器###')
             self.driver.quit()
 
-        options = webdriver.ChromeOptions()
+        options = webdriver.EdgeOptions()
         # 禁止图片、js、css加载
         prefs = {"profile.managed_default_content_settings.images": 2,
                  "profile.managed_default_content_settings.javascript": 1,
@@ -97,11 +99,14 @@ class Concert(object):
         options.add_argument("--disable-blink-features=AutomationControlled")
 
         # 更换等待策略为不等待浏览器加载完全就进行下一步操作
-        capa = DesiredCapabilities.CHROME
+        capa = DesiredCapabilities.EDGE.copy()
         # normal, eager, none
         capa["pageLoadStrategy"] = "eager"
-        self.driver = webdriver.Chrome(
-            executable_path=self.driver_path, options=options, desired_capabilities=capa)
+        s = Service(self.driver_path)
+
+        options.to_capabilities()
+
+        self.driver = webdriver.Edge(service=s, options=options)
         # 登录到具体抢购页面
         self.login()
         self.driver.refresh()
@@ -138,8 +143,7 @@ class Concert(object):
 
             # 确认页面刷新成功
             try:
-                box = WebDriverWait(self.driver, 3, 0.1).until(
-                    EC.presence_of_element_located((By.ID, 'app')))
+                box = WebDriverWait(self.driver, 3, 0.1).until(EC.presence_of_element_located((By.ID, 'app')))
             except:
                 raise Exception(u"***Error: 页面刷新出错***")
 
@@ -154,7 +158,7 @@ class Concert(object):
                 raise Exception(u"***Error: 实名制遮罩关闭失败***")
 
             try:
-                buybutton = box.find_element(by=By.CLASS_NAME, value='buy__button')
+                buybutton = box.find_element(by=By.CLASS_NAME, value='buy__button__text')
                 sleep(0.5)
                 buybutton_text: str = buybutton.text
             except Exception as e:
