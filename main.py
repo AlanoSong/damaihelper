@@ -107,11 +107,11 @@ class Concert(object):
         capa = DesiredCapabilities.EDGE.copy()
         # normal, eager, none
         capa["pageLoadStrategy"] = "eager"
-        s = Service(self.WebDriverPath)
+        srv = Service(self.WebDriverPath)
 
         options.to_capabilities()
 
-        self.driver = webdriver.Edge(service=s, options=options)
+        self.driver = webdriver.Edge(service=srv, options=options)
         # 登录到具体抢购页面
         self.Login()
         self.driver.refresh()
@@ -148,7 +148,7 @@ class Concert(object):
 
             # 确认页面刷新成功
             try:
-                box = WebDriverWait(self.driver, 3, 0.1).until(EC.presence_of_element_located((By.ID, 'app')))
+                box = WebDriverWait(self.driver, 3, 0.1).until(EC.presence_of_element_located((By.ID, 'root')))
             except:
                 raise Exception(u"***Error: 页面刷新出错***")
 
@@ -176,6 +176,9 @@ class Concert(object):
             if "缺货" in buybutton_text:
                 raise Exception("---已经缺货了---")
 
+            if "已下架 "in buybutton_text:
+                raise Exception("---已经下架了---")
+
             sleep(0.1)
             buybutton.click()
             box = WebDriverWait(self.driver, 2, 0.1).until(
@@ -186,12 +189,13 @@ class Concert(object):
                 toBeClicks = []
                 try:
                     date = WebDriverWait(self.driver, 2, 0.1).until(
-                        EC.presence_of_element_located((By.CLASS_NAME, 'bui-dm-sku-calendar')))
+                        EC.presence_of_element_located((By.CSS_SELECTOR, '.sku-content-column')))
                 except Exception as e:
                     date = None
                 if date is not None:
-                    date_list = date.find_elements(
-                        by=By.CLASS_NAME, value='bui-calendar-day-box')
+                    date_list = date.find_elements(by=By.CSS_SELECTOR, value='.item-text-selected')
+                    print(date_list)
+
                     for i in self.date:
                         j: WebElement = date_list[i-1]
                         toBeClicks.append(j)

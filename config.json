@@ -1,6 +1,6 @@
 {
   "date": [
-    14
+    1
   ],
   "sess": [
     1,
@@ -27,7 +27,7 @@
   "WebDriverPath": "./Tools/edgedriver_win64/msedgedriver.exe",
 
   "DamaiMainPageUrl": "https://www.damai.cn/",
-  "TargetUrl": "https://m.damai.cn/shows/item.html?from=false&itemId=775434398317",
+  "TargetUrl": "https://m.damai.cn/shows/item.html?from=false&itemId=785036651297",
 
   "comment": {
     "title": "comment 下的所有内容为自定义注释,无实际含义",
@@ -43,7 +43,7 @@
     "TargetUrl": "购票的实际地址,需要使用手机端的地址,域名: https://m.damai.cn/ 开头",
     "queue": {
       "title": "列入待抢的链接地址",
-      "zhoujielun_0403": "https://m.damai.cn/shows/item.html?from=false&itemId=775434398317"
+      "zhoujielun_0403": "https://m.damai.cn/shows/item.html?from=false&itemId=785036651297"
     }
   }
 }
